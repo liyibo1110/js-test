@@ -54,17 +54,17 @@ function request(url){
     });
 }
 
-/**
- * 模拟实际业务
- */
-function foo(x, y){
-    return request("http://test.com/?x=" + x + "&y=" + y);
-}
-
 function *main(){
     try{
-        let text = yield foo(11, 31);
-        console.log(text);
+        let texts = yield Promise.all([
+            request("http://test.com"),
+            request("http://test2.com")
+        ]);
+        let text = texts[0];
+        let text2 = texts[1];
+
+        let result = yield request("http://test3.com/?text=" + text + "," + text2)
+        console.log(result);
     }catch(err){
         console.error(err);
     }
